@@ -1,14 +1,22 @@
 var instagramMarkers = [];
+var twitterMarkers = [];
 var lastCircleDrawn;
 var lastMarkerDrawn;
 
 function clearElementsOnMap(){
+  $("#socialResults").empty();
   if(instagramMarkers.length > 0){
     for(var i in instagramMarkers){
       instagramMarkers[i].setMap(null);
     }
   }
 
+  if(twitterMarkers.length > 0){
+    for(var i in twitterMarkers){
+      twitterMarkers[i].setMap(null);
+    }
+  }
+  
   if(lastCircleDrawn !== undefined){
     lastCircleDrawn.setMap(null);
   }

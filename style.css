@@ -121,26 +121,26 @@ ul#socialResults li
   	overflow: auto;
 }
 
-img.instagramThumbnail
+img.instagramThumbnail, img.twitterThumbnail
 {
 	border-radius: 100px;
 	margin-left: 5px;
 	width: 100%;
 }
 
-div.instagramDescriptionContainer
+div.instagramDescriptionContainer, div.twitterDescriptionContainer
 {
 	width: 65%;
 	margin-right: 5px;
 	margin-left: 5px;
 }
 
-div.instagramThumbnailContainer
+div.instagramThumbnailContainer, div.twitterThumbnailContainer
 {
 	width: 25%;
 }
 
-div.instagramThumbnailContainer, div.instagramDescriptionContainer
+div.instagramThumbnailContainer, div.instagramDescriptionContainer, div.twitterThumbnailContainer, div.twitterDescriptionContainer
 {
 	display: inline-block;
     *display: inline;

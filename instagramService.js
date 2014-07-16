@@ -3,7 +3,8 @@ var lastOpenedInfoWindow;
 var lastSelectedInstagramId;
 var instagramMarkerOptions = {
 	animation: google.maps.Animation.DROP,
-	zIndex: 1
+	zIndex: 1,
+	icon: "http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
 };
 
 function instagramSearch(lat, lng, radius){	
@@ -61,8 +62,6 @@ function ScrollToInstagram(instagramId){
 
 function onSuccess(jsonResponse){
 	console.log(jsonResponse);
-	$("#socialResults").empty();
-
 	for(var i=0; i < jsonResponse.data.length; i++){
 		var location = jsonResponse.data[i].location;
 		if(location){
