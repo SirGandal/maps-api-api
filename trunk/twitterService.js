@@ -1,5 +1,11 @@
 var serverUrl = 'http://localhost:8080';
 
+var twitterMarkerOptions = {
+	animation: google.maps.Animation.DROP,
+	zIndex: 1,
+	icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+};
+
 function twitterSearch(latitude, longitude, radius){
 	var url = serverUrl + '/SocialMedia/Twitter/?lat=' + latitude + '&lng=' + longitude + '&radius=' + Math.round(radius/1000);
 	$.ajax({
@@ -57,11 +63,11 @@ for(var i=0; i < jsonResponse.statuses.length; i++){
 			var twitterId =  jsonResponse.statuses[i].id_str;
 			var userId = jsonResponse.statuses[i].user.id_str;
 			var twitterElement = '<li id="'+ twitterId +'" class="socialResult">' +
-									'<div class="instagramThumbnailContainer">' +
-										'<img class="instagramThumbnail" src="' + jsonResponse.statuses[i].user.profile_image_url.replace("_normal", "_bigger") + '"/>' +
+									'<div class="twitterThumbnailContainer">' +
+										'<img class="twitterThumbnail" src="' + jsonResponse.statuses[i].user.profile_image_url.replace("_normal", "_bigger") + '"/>' +
 									'</div> ' +
-									'<div class="instagramDescriptionContainer">' +
-										'<p class="instagram-user">by ' + jsonResponse.statuses[i].user.screen_name +
+									'<div class="twitterDescriptionContainer">' +
+										'<p class="twitter-user">by ' + jsonResponse.statuses[i].user.screen_name +
 										'<p>'+ jsonResponse.statuses[i].text + '</p>' +
 										'<p>at ' + date.toLocaleTimeString() + ' of ' + date.toLocaleDateString() + '</p>' +
 										'<p><a target="_blank" href="' + "https://twitter.com/" + jsonResponse.statuses[i].user.screen_name + "/status/" + twitterId + '">Link to original</a> | <a class="ShowInfoWindowOnMap" href="#">Show on Map</a> | <a class="analyze-user" href="#">AnalyzeUser</a></p>' +
@@ -69,22 +75,22 @@ for(var i=0; i < jsonResponse.statuses.length; i++){
 								'</li>';
 
 			$("#socialResults").append(twitterElement);
-			instagramMarkerOptions.map = map;
-			instagramMarkerOptions.position = new google.maps.LatLng(location.coordinates[1], location.coordinates[0]);
-			var instagramMarker = new google.maps.Marker(instagramMarkerOptions);
+			twitterMarkerOptions.map = map;
+			twitterMarkerOptions.position = new google.maps.LatLng(location.coordinates[1], location.coordinates[0]);
+			var twitterMarker = new google.maps.Marker(twitterMarkerOptions);
 
-			instagramMarkers.push(instagramMarker);
+			twitterMarkers.push(twitterMarker);
 
 			var instagramInfowindow = new google.maps.InfoWindow();
 			instagramInfowindow.setContent(twitterElement);
-			(function(instagramMarker, instagramInfowindow, twitterId){google.maps.event.addListener(instagramMarker, 'click', function() {
+			(function(twitterMarker, instagramInfowindow, twitterId){google.maps.event.addListener(twitterMarker, 'click', function() {
 				ScrollToInstagram(twitterId);
 			});
 			
-			$('a.ShowInfoWindowOnMap').last().click({instagramMarker: instagramMarker, instagramInfowindow: instagramInfowindow, twitterId: twitterId}, function(e){
+			$('a.ShowInfoWindowOnMap').last().click({twitterMarker: twitterMarker, instagramInfowindow: instagramInfowindow, twitterId: twitterId}, function(e){
 				ScrollToInstagram(e.data.twitterId);
-				ShowInfoWindowOnMap(e.data.instagramMarker, e.data.instagramInfowindow);
-			});})(instagramMarker, instagramInfowindow, twitterId);
+				ShowInfoWindowOnMap(e.data.twitterMarker, e.data.instagramInfowindow);
+			});})(twitterMarker, instagramInfowindow, twitterId);
 
 			(function(userId){
 			$('a.analyze-user').last().click({userId: userId}, function(e){
