@@ -83,7 +83,8 @@ function onSuccess(jsonResponse){
 
 			$("#socialResults").append(instagramElement);
 			instagramMarkerOptions.map = map;
-			instagramMarkerOptions.position = new google.maps.LatLng(location.latitude, location.longitude);
+			var markerPosition = new google.maps.LatLng(location.latitude, location.longitude);
+			instagramMarkerOptions.position = markerPosition;
 			var instagramMarker = new google.maps.Marker(instagramMarkerOptions);
 
 			instagramMarkers.push(instagramMarker);
@@ -95,8 +96,18 @@ function onSuccess(jsonResponse){
 			});
 
 			$('a.ShowInfoWindowOnMap').last().click({instagramMarker: instagramMarker, instagramInfowindow: instagramInfowindow, instagramId: instagramId}, function(e){
+				if(lastAnimatedInstagramMarker){
+					lastAnimatedInstagramMarker.setAnimation(null);
+					lastAnimatedInstagramMarker = instagramMarker;
+				}else{
+					lastAnimatedInstagramMarker = instagramMarker;
+				}
+				
 				ScrollToInstagram(e.data.instagramId);
-				ShowInfoWindowOnMap(e.data.instagramMarker, e.data.instagramInfowindow);
+				//ShowInfoWindowOnMap(e.data.instagramMarker, e.data.instagramInfowindow);
+				map.panTo(instagramMarker.position);
+				//map.setZoom(17);
+				instagramMarker.setAnimation(google.maps.Animation.BOUNCE);
 			});})(instagramMarker, instagramInfowindow, instagramId);
 
 			(function(userId){
@@ -105,6 +116,8 @@ function onSuccess(jsonResponse){
 			});})(userId);
 		}
 	}
+	
+	//var markerCluster = new MarkerClusterer(map, instagramMarkers);
 
 	/*enable marker clusterer when doing analysis of user*/
 	/*var markererClusterer = new MarkerClusterer(map, instagramMarkers);*/
