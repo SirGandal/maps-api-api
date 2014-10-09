@@ -69,15 +69,20 @@ function onSuccess(jsonResponse){
 			var date = new Date(timestamp*1000);
 			var instagramId =  jsonResponse.data[i].id;
 			var userId = jsonResponse.data[i].user.id;
-			var instagramElement = '<li id="'+ instagramId +'" class="socialResult">' +
+			var imgThumbnail = jsonResponse.data[i].images.thumbnail.url;
+			var username = jsonResponse.data[i].user.username;
+			var caption = (jsonResponse.data[i].caption !== null ? jsonResponse.data[i].caption.text : "empty");
+			var linkToOriginal = jsonResponse.data[i].link;
+
+			var instagramElement = '<div id="'+ instagramId +'">' +
 									'<div class="instagramThumbnailContainer">' +
-										'<img class="instagramThumbnail" src="' + jsonResponse.data[i].images.thumbnail.url + '"/>' +
+										'<img class="instagramThumbnail" src="' + imgThumbnail + '"/>' +
 									'</div> ' +
 									'<div class="instagramDescriptionContainer">' +
-										'<p class="instagram-user">by ' + jsonResponse.data[i].user.username +
-										'<p>'+ (jsonResponse.data[i].caption !== null ? jsonResponse.data[i].caption.text : "empty") + '</p>' +
+										'<p class="instagram-user">by ' + username  +
+										'<p>'+ caption + '</p>' +
 										'<p>at ' + date.toLocaleTimeString() + ' of ' + date.toLocaleDateString() + '</p>' +
-										'<p><a target="_blank" href="' + jsonResponse.data[i].link + '">Link to original</a> | <a class="ShowInfoWindowOnMap" href="#">Show on Map</a> | <a class="analyze-user" href="#">AnalyzeUser</a></p>' +
+										'<p><a target="_blank" href="' + linkToOriginal + '">Link to original</a> | <a class="ShowInfoWindowOnMap" href="#">Show on Map</a> | <a class="analyze-user" href="#">AnalyzeUser</a></p>' +
 									'</div>' +
 								'</li>';
 
@@ -91,9 +96,12 @@ function onSuccess(jsonResponse){
 
 			var instagramInfowindow = new google.maps.InfoWindow();
 			instagramInfowindow.setContent(instagramElement);
-			(function(instagramMarker, instagramInfowindow, instagramId){google.maps.event.addListener(instagramMarker, 'click', function() {
-				ScrollToInstagram(instagramId);
-			});
+			(function(instagramMarker, instagramInfowindow, instagramElement){
+				google.maps.event.addListener(instagramMarker, 'click', function() {
+					instagramMarker.setAnimation(null);
+					//ScrollToInstagram(instagramId);
+					$('.selected-social-result').html(instagramElement);
+					});
 
 			$('a.ShowInfoWindowOnMap').last().click({instagramMarker: instagramMarker, instagramInfowindow: instagramInfowindow, instagramId: instagramId}, function(e){
 				if(lastAnimatedInstagramMarker){
@@ -106,9 +114,9 @@ function onSuccess(jsonResponse){
 				ScrollToInstagram(e.data.instagramId);
 				//ShowInfoWindowOnMap(e.data.instagramMarker, e.data.instagramInfowindow);
 				map.panTo(instagramMarker.position);
-				//map.setZoom(17);
+				map.setZoom(17);
 				instagramMarker.setAnimation(google.maps.Animation.BOUNCE);
-			});})(instagramMarker, instagramInfowindow, instagramId);
+			});})(instagramMarker, instagramInfowindow, instagramElement);
 
 			(function(userId){
 			$('a.analyze-user').last().click({userId: userId}, function(e){

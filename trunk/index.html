@@ -3,10 +3,15 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
+
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing&key=AIzaSyBtYJHV_tJg8ZLjBF0ER0sgY6HOnYFFvZU">
     </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
     <script type="text/javascript" src="markerclusterer.js"></script>
     <script type="text/javascript" src="helper.js"></script>
     <script type="text/javascript" src="twitterService.js"></script>
@@ -14,23 +19,53 @@
     <script type="text/javascript" src="app.js"></script>
   </head>
   <body>
-    <div id="left-container">
-      <div class="controls">
-      <button id="areaOfInterestButton">Select area of interest</button>
-      <button id="aroundMeButton">AroundMe</button>
-      <br>
-      <button id="dropPinButton">Drop pin</button>
-      <input id="dropPinRadius" value="1000"/> m 
+    <!-- <div id="map-controls">
+      <div id="control-ui" title="Click to select an Area on Interest">
+          <div id="control-text">
+            <img src="http://www.clker.com/cliparts/4/6/d/0/1237099078782325025Steren_Futurist_circle.svg.hi.png">
+          </div>
+      </div>
+    </div>  -->
+    
+     <div data-role="page" id="pageone">
+      <div data-role="panel" data-display="overlay" id="myPanel">
+        <div id="left-container">
+          <div class="controls">
+            <button id="areaOfInterestButton">Select area of interest</button>
+            <button id="aroundMeButton">AroundMe</button>
+          <br>
       <p>results from <input id="minTimestampMinutes" value="30"/> minutes ago</p>
-      <p><a class="instagram-access-link" href="#">Authorize instagram access</a></p>
     </div>
       <div class="social-container">
         <ul id="socialResults">
         </ul>
       </div>
     </div>
-    <div id="map-canvas"/>
-    <input id="pac-input" class="controls" type="text"
-        placeholder="Enter a location">
+      </div>
+
+      <div data-role="main" class="ui-content">
+        <p>Click on the button below to open the Panel.</p>
+        <a href="#myPanel" class="ui-btn ui-shadow">Open Panel</a>
+      </div>
+    </div>
+
+    <div class="selected-social-result">
+    </div>
+
+    <div id="map-canvas" />   
+    <!-- <div id="left-container">
+      <div class="controls">
+      <button id="areaOfInterestButton">Select area of interest</button>
+      <button id="aroundMeButton">AroundMe</button>
+      <br>
+      <p>results from <input id="minTimestampMinutes" value="30"/> minutes ago</p>
+    </div>
+      <div class="social-container">
+        <ul id="socialResults">
+        </ul>
+      </div>
+    </div> -->
+    <!-- <input id="pac-input" class="controls" type="text"
+        placeholder="Enter a location"> -->
   </body>
 </html>
