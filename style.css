@@ -12,13 +12,52 @@ body
 
 #map-canvas 
 { 
-	border-radius: 20px;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	margin-left: 10px;
-	height: 97%;
-	width: 58%;
+	border-radius: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	height: 100%;
+	width: 100%;
 	float: left;
+}
+
+.selected-social-result{
+	width: 500px;
+	bottom: 30px;
+	right: 30px;
+	position: absolute;
+	z-index: 100;
+	background-color: rgba(255, 255, 255, 0.59);
+	border-radius: 5px;
+}
+
+#map-controls{
+	padding: 5px;
+	top: 25px !important;
+	right: 0px !important;
+}
+
+#control-ui{
+	background-color: white;
+	text-align: center;
+	border-style: solid;
+	border-width: 1px;
+	border-color: gray;
+	cursor: pointer;
+}
+
+#control-text img{
+	height: 50px;
+	width: 50px;
+	vertical-align: middle;
+	padding: 5px;
+}
+
+#control-text{
+	font-family: 'Arial,sans-serif';
+	font-size: 12px;
+	padding-left: 4px;
+	padding-right: 4px;
 }
 
 .controls{
@@ -124,20 +163,21 @@ ul#socialResults li
 img.instagramThumbnail, img.twitterThumbnail
 {
 	border-radius: 100px;
-	margin-left: 5px;
 	width: 100%;
 }
 
 div.instagramDescriptionContainer, div.twitterDescriptionContainer
 {
 	width: 65%;
-	margin-right: 5px;
-	margin-left: 5px;
+	padding: 10px;
+	padding-left: 0px;
 }
 
 div.instagramThumbnailContainer, div.twitterThumbnailContainer
 {
 	width: 25%;
+	height: 100%;
+	padding: 10px;
 }
 
 div.instagramThumbnailContainer, div.instagramDescriptionContainer, div.twitterThumbnailContainer, div.twitterDescriptionContainer

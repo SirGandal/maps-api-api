@@ -17,7 +17,7 @@ var markerOptions = {
   zIndex: 1,
 };
 var circleOptions = {
-  fillColor: '#ff0000',
+  fillColor: '#000000',
   fillOpacity: 0.1,
   strokeWeight: 1,
   clickable: true,
@@ -58,13 +58,6 @@ window.onload = function(){
       alert("geolocation not supported in this browser");
     }
   };
-
-  document.getElementById("dropPinButton").onclick = function () {
-    clearElementsOnMap();
-    drawingManager.setOptions({
-      drawingMode: google.maps.drawing.OverlayType.MARKER
-    });
-  };
 };
 
 function initialize() {
@@ -74,11 +67,22 @@ function initialize() {
   };
   map = new google.maps.Map(document.getElementById("map-canvas"),
     mapOptions);
+/*
+  google.maps.event.addDomListener(document.getElementById('control-ui'), 'click', function() {
+    clearElementsOnMap();
+    drawingManager.setOptions({
+      drawingMode: google.maps.drawing.OverlayType.CIRCLE
+    });
+  });
+
+  var controlDiv = document.getElementById('map-controls');
+  controlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);*/
 
   poly.setMap(map);
 
   drawingManager = new google.maps.drawing.DrawingManager({
-    drawingMode: null,
+    drawingMode: google.maps.drawing.OverlayType.CIRCLE,
     drawingControl: false,
     drawingControlOptions: {
       position: google.maps.ControlPosition.TOP_CENTER,
@@ -97,6 +101,7 @@ function initialize() {
 
   google.maps.event.addListener(drawingManager, 'circlecomplete', function(circle) {
     drawingManager.setDrawingMode(null);
+    var c = new google.maps.Circle(circle);
     lastCircleDrawn = circle;
     instagramSearch(circle.center.lat(), circle.center.lng(), circle.radius);
     twitterSearch(circle.center.lat(), circle.center.lng(), circle.radius);
