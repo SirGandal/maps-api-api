@@ -31,6 +31,18 @@ body
 	border-radius: 5px;
 }
 
+.close {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	height: 40px;
+	cursor: pointer;
+}
+
+.close-hide, .hide{
+	display:none;
+}
+
 #map-controls{
 	padding: 5px;
 	top: 25px !important;

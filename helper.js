@@ -1,6 +1,7 @@
 var instagramMarkers = [];
 var twitterMarkers = [];
-var lastAnimatedInstagramMarker;
+var lastAnimatedMarker;
+var lastSelectedId;
 var lastCircleDrawn;
 var lastMarkerDrawn;
 

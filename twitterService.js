@@ -62,7 +62,7 @@ for(var i=0; i < jsonResponse.statuses.length; i++){
 			var date =timestamp;
 			var twitterId =  jsonResponse.statuses[i].id_str;
 			var userId = jsonResponse.statuses[i].user.id_str;
-			var twitterElement = '<li id="'+ twitterId +'" class="socialResult">' +
+			var twitterElement = '<div id="'+ twitterId +'">' +
 									'<div class="twitterThumbnailContainer">' +
 										'<img class="twitterThumbnail" src="' + jsonResponse.statuses[i].user.profile_image_url.replace("_normal", "_bigger") + '"/>' +
 									'</div> ' +
@@ -72,25 +72,40 @@ for(var i=0; i < jsonResponse.statuses.length; i++){
 										'<p>at ' + date.toLocaleTimeString() + ' of ' + date.toLocaleDateString() + '</p>' +
 										'<p><a target="_blank" href="' + "https://twitter.com/" + jsonResponse.statuses[i].user.screen_name + "/status/" + twitterId + '">Link to original</a> | <a class="ShowInfoWindowOnMap" href="#">Show on Map</a> | <a class="analyze-user" href="#">AnalyzeUser</a></p>' +
 									'</div>' +
-								'</li>';
+								'</div>';
 
-			$("#socialResults").append(twitterElement);
+			//$("#socialResults").append(twitterElement);
 			twitterMarkerOptions.map = map;
 			twitterMarkerOptions.position = new google.maps.LatLng(location.coordinates[1], location.coordinates[0]);
 			var twitterMarker = new google.maps.Marker(twitterMarkerOptions);
-
 			twitterMarkers.push(twitterMarker);
 
-			var instagramInfowindow = new google.maps.InfoWindow();
-			instagramInfowindow.setContent(twitterElement);
-			(function(twitterMarker, instagramInfowindow, twitterId){google.maps.event.addListener(twitterMarker, 'click', function() {
-				ScrollToInstagram(twitterId);
-			});
-			
-			$('a.ShowInfoWindowOnMap').last().click({twitterMarker: twitterMarker, instagramInfowindow: instagramInfowindow, twitterId: twitterId}, function(e){
-				ScrollToInstagram(e.data.twitterId);
-				ShowInfoWindowOnMap(e.data.twitterMarker, e.data.instagramInfowindow);
-			});})(twitterMarker, instagramInfowindow, twitterId);
+			(function(twitterMarker, twitterElement, twitterId){
+				google.maps.event.addListener(twitterMarker, 'click', function() {
+					if(lastAnimatedMarker !== undefined && lastAnimatedMarker !== twitterMarker){
+						lastAnimatedMarker.setAnimation(null)
+					}
+					
+					lastAnimatedMarker = twitterMarker;
+					twitterMarker.setAnimation(google.maps.Animation.BOUNCE);	
+
+					if(lastSelectedId !== undefined){
+						$('#'+lastSelectedId).remove();
+					}
+
+					lastSelectedId = twitterId;
+
+					$('.selected-social-result').append(twitterElement);
+					$('.selected-social-result').removeClass('hide');
+					$('.close.hide').addClass('close').removeClass('hide')
+					$('.close').click(function(){
+						if(lastAnimatedMarker !== undefined){
+							lastAnimatedMarker.setAnimation(null)
+						}
+						$('.selected-social-result').addClass('hide');
+					});
+				});
+			})(twitterMarker, twitterElement, twitterId);
 
 			(function(userId){
 			$('a.analyze-user').last().click({userId: userId}, function(e){
