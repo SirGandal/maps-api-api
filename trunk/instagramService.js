@@ -61,7 +61,6 @@ function ScrollToInstagram(instagramId){
 }
 
 function onSuccess(jsonResponse){
-	console.log(jsonResponse);
 	for(var i=0; i < jsonResponse.data.length; i++){
 		var location = jsonResponse.data[i].location;
 		if(location){
@@ -86,7 +85,7 @@ function onSuccess(jsonResponse){
 									'</div>' +
 								'</li>';
 
-			$("#socialResults").append(instagramElement);
+			//$("#socialResults").append(instagramElement);
 			instagramMarkerOptions.map = map;
 			var markerPosition = new google.maps.LatLng(location.latitude, location.longitude);
 			instagramMarkerOptions.position = markerPosition;
@@ -94,34 +93,38 @@ function onSuccess(jsonResponse){
 
 			instagramMarkers.push(instagramMarker);
 
-			var instagramInfowindow = new google.maps.InfoWindow();
-			instagramInfowindow.setContent(instagramElement);
-			(function(instagramMarker, instagramInfowindow, instagramElement){
+			(function(instagramMarker, instagramElement, instagramId){
 				google.maps.event.addListener(instagramMarker, 'click', function() {
-					instagramMarker.setAnimation(null);
-					//ScrollToInstagram(instagramId);
-					$('.selected-social-result').html(instagramElement);
-					});
+					if(lastAnimatedMarker !== undefined && lastAnimatedMarker !== instagramMarker){
+						lastAnimatedMarker.setAnimation(null)
+					}
+					
+					lastAnimatedMarker = instagramMarker;
+					instagramMarker.setAnimation(google.maps.Animation.BOUNCE);	
+					
+					if(lastSelectedId !== undefined){
+						$('#'+lastSelectedId).remove();
+					}
 
-			$('a.ShowInfoWindowOnMap').last().click({instagramMarker: instagramMarker, instagramInfowindow: instagramInfowindow, instagramId: instagramId}, function(e){
-				if(lastAnimatedInstagramMarker){
-					lastAnimatedInstagramMarker.setAnimation(null);
-					lastAnimatedInstagramMarker = instagramMarker;
-				}else{
-					lastAnimatedInstagramMarker = instagramMarker;
-				}
-				
-				ScrollToInstagram(e.data.instagramId);
-				//ShowInfoWindowOnMap(e.data.instagramMarker, e.data.instagramInfowindow);
-				map.panTo(instagramMarker.position);
-				map.setZoom(17);
-				instagramMarker.setAnimation(google.maps.Animation.BOUNCE);
-			});})(instagramMarker, instagramInfowindow, instagramElement);
+					lastSelectedId = instagramId;
+
+					$('.selected-social-result').append(instagramElement);
+					$('.selected-social-result').removeClass('hide');
+					$('.close.hide').addClass('close').removeClass('hide')
+					$('.close').click(function(){
+						if(lastAnimatedMarker !== undefined){
+							lastAnimatedMarker.setAnimation(null)
+						}
+						$('.selected-social-result').addClass('hide');
+					});
+				});
+			})(instagramMarker, instagramElement, instagramId);
 
 			(function(userId){
-			$('a.analyze-user').last().click({userId: userId}, function(e){
-				userMediaSearch(userId);
-			});})(userId);
+				$('a.analyze-user').last().click({userId: userId}, function(e){
+					userMediaSearch(userId);
+				});
+			})(userId);
 		}
 	}
 	
